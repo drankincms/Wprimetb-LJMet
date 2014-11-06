@@ -114,12 +114,16 @@ process.event_selector = cms.PSet(
 #
 # Input files
 #
-#input_module = 'LJMet.Com.TT_CT10_TuneZ2star_8TeV_powheg_tauola_Summer12_DR53X_PU_S10_START53_V7A_v2_TLBSM_53x_v2_sample_cff'
-input_module - 'root://cmsxrootd.fnal.gov/'
-process.load(input_module)
-#process.inputs.nEvents    = cms.int32(1000000)
-process.inputs.nEvents    = cms.int32(10000)
-process.inputs.skipEvents = cms.int32(0)
+process.inputs = cms.PSet (
+       nEvents    = cms.int32(100),
+           skipEvents = cms.int32(0),
+           lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange()),
+           fileNames  = cms.vstring(
+		[
+			       'root://cmsxrootd.fnal.gov//store/mc/Spring14miniaod/SingletopWprime_M2000GeV_right_Tune4C_13TeV-comphep/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/2C794437-DF1E-E411-9467-0025901ACB64.root',
+		]
+           )
+)
 
 
 # JSON
