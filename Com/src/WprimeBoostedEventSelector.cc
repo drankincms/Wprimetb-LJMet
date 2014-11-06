@@ -659,27 +659,27 @@ bool WprimeBoostedEventSelector::operator()( edm::EventBase const & event, pat::
         event.getByLabel( mtPar["met_collection"], mhMet );
         mpMet = edm::Ptr<pat::MET>( mhMet, 0);
 
-        event.getByLabel( mtPar["type1corrmet_collection"], mhType1CorrMet );
-        mpType1CorrMet = edm::Ptr<reco::PFMET>( mhType1CorrMet, 0);
+//        event.getByLabel( mtPar["type1corrmet_collection"], mhType1CorrMet );
+//        mpType1CorrMet = edm::Ptr<reco::PFMET>( mhType1CorrMet, 0);
         if ( mbPar["met_cuts"] ) {
 
             // pfMet
             //if ( mpType1CorrMet.isNonnull() && mpType1CorrMet.isAvailable() ) {
-            if ( mpMet.isNonnull() && mpMet.isAvailable() ) {
+          if ( mpMet.isNonnull() && mpMet.isAvailable() ) {
 
-                //reco::PFMET const & met = mhType1CorrMet->at(0);
-                pat::MET const & met = mhMet->at(0);
+              //reco::PFMET const & met = mhType1CorrMet->at(0);
+              pat::MET const & met = mhMet->at(0);
 
-                correctedMET_p4 = correctMet(*mpMet, event);
+              correctedMET_p4 = correctMet(*mpMet, event);
 
-                while(1){ 
+              while(1){ 
 
-                    if ( ignoreCut("Min MET") || correctedMET_p4.Pt()>cut("Min MET", double()) ) passCut(ret, "Min MET");
-                    else break;
+                  if ( ignoreCut("Min MET") || correctedMET_p4.Pt()>cut("Min MET", double()) ) passCut(ret, "Min MET");
+                  else break;
 
-                    break;
-                } 
-            }
+                  break;
+              } 
+          }
         } // end of MET cuts
         if (mbPar["debug"]) std::cout<<"finish met cuts..."<<std::endl;
         

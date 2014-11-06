@@ -655,7 +655,7 @@ bool StopEventSelector::operator()( edm::EventBase const & event, pat::strbitset
 	  double min_deltar = std::numeric_limits<double>::max();
 	  for (std::vector<edm::Ptr<pat::Jet> >::const_iterator _ijet = mvSelJets.begin();
 	       _ijet!=mvSelJets.end(); ++_ijet){
-	    min_deltar = std::min( min_deltar, reco::deltaR(*_imu, *(*_ijet)) );
+	    min_deltar = std::min( min_deltar, (double)reco::deltaR(*_imu, *(*_ijet)) );
 	  }
 	  if ( min_deltar>0.3 ){ }
 	  else break;
@@ -838,8 +838,8 @@ bool StopEventSelector::operator()( edm::EventBase const & event, pat::strbitset
     //      
 
     // corrected met for some calculators
-    event.getByLabel( mtPar["type1corrmet_collection"], mhType1CorrMet );
-    mpType1CorrMet = edm::Ptr<reco::PFMET>( mhType1CorrMet, 0);
+//    event.getByLabel( mtPar["type1corrmet_collection"], mhType1CorrMet );
+//    mpType1CorrMet = edm::Ptr<reco::PFMET>( mhType1CorrMet, 0);
 
     event.getByLabel( mtPar["met_collection"], mhMet );
     mpMet = edm::Ptr<pat::MET>( mhMet, 0);
@@ -865,7 +865,6 @@ bool StopEventSelector::operator()( edm::EventBase const & event, pat::strbitset
 	}
       }
     } // end of MET cuts
-
 
     
     //

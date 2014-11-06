@@ -11,8 +11,7 @@ Contact:        Sadia Khalil (skhalil@fnal.gov)
 #include "FWCore/Utilities/interface/InputTag.h"
 #include "FWCore/Common/interface/EventBase.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-#include "EGamma/EGammaAnalysisTools/interface/ElectronEffectiveArea.h"
-//#include "EgammaAnalysis/ElectronTools/interface/ElectronEffectiveArea.h"
+#include "EgammaAnalysis/ElectronTools/interface/ElectronEffectiveArea.h"
 
 //Math
 #include "CLHEP/Units/GlobalPhysicalConstants.h"
@@ -288,7 +287,7 @@ class TopElectronSelector : public Selector<pat::Electron>  {
 
          Double_t Ooemoop = (1.0/electron.ecalEnergy() - electron.eSuperClusterOverP()/electron.ecalEnergy());
          Double_t RelIso  = ( chIso + max(0.0, nhIso + phIso - rhoIso*AEff) )/ electron.ecalDrivenMomentum().pt();
-         Int_t mHits   =  electron.gsfTrack()->trackerExpectedHitsInner().numberOfHits();
+         Int_t mHits   =  electron.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
          Bool_t vtxFitConv = electron.passConversionVeto();
 
          // now apply the cuts

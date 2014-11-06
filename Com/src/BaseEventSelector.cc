@@ -384,7 +384,7 @@ TLorentzVector BaseEventSelector::correctJet(const pat::Jet & jet, edm::EventBas
   double correction = 1.0;
 
   edm::Handle<double> rhoHandle;
-  edm::InputTag rhoSrc_("kt6PFJets", "rho");
+  edm::InputTag rhoSrc_("fixedGridRhoAll", "");
   event.getByLabel(rhoSrc_, rhoHandle);
   double rho = std::max(*(rhoHandle.product()), 0.0);
 

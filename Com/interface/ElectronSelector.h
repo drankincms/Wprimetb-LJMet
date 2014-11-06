@@ -289,7 +289,7 @@ public: // interface
 
         double convDist = electron.convDist();
         double convDcot = electron.convDcot();
-        int nlosthits = electron.gsfTrack()->trackerExpectedHitsInner().numberOfLostHits();
+        int nlosthits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
         bool isNotConversion = (nlosthits == 0 && (fabs(convDcot)>0.02 || fabs(convDist)>0.02));
         bool isNotConversionTight = (nlosthits == 0 && fabs(convDcot)>0.02 && fabs(convDist)>0.02);
 

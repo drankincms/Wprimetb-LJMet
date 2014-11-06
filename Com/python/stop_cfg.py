@@ -36,7 +36,6 @@ process.CommonCalc.dummy_parameter = cms.string('Dummy parameter value')
 
 # pileup calculator options
 process.load('LJMet.Com.pileupCalc_cfi')
-process.PileUpCalc.verbosity = process.ljmet.verbosity
 
 # Stop calculator options
 process.load('LJMet.Com.stopCalc_cfi')

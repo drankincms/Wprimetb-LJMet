@@ -22,15 +22,9 @@ class PileUpCalc : public BaseCalc{
   
 public:
   
-  PileUpCalc():mVerbosity(1){}
   virtual ~PileUpCalc(){}
 
   virtual int BeginJob(){
-
-    // grab parameter values
-    if (mPset.exists("verbosity")){
-      mVerbosity = mPset.getParameter<int>("verbosity");
-    }
 
 
     // Distribution used for Summer2012 MC. 
@@ -429,11 +423,11 @@ public:
         DataDistABCD735.push_back(DataDist_2012ABCD735[i]);
         MCDist.push_back(MCDist_Summer2012_S10[i]);
     }
-    LumiWeightsOct_ = edm::LumiReWeighting(MCDist, DataDistOct, mVerbosity);
-    LumiWeightsABC_ = edm::LumiReWeighting(MCDist, DataDistABC, mVerbosity);
-    LumiWeightsABC735_ = edm::LumiReWeighting(MCDist, DataDistABC735, mVerbosity);
-    LumiWeightsABCD_ = edm::LumiReWeighting(MCDist, DataDistABCD, mVerbosity);
-    LumiWeightsABCD735_ = edm::LumiReWeighting(MCDist, DataDistABCD735, mVerbosity);
+    LumiWeightsOct_ = edm::LumiReWeighting(MCDist, DataDistOct);
+    LumiWeightsABC_ = edm::LumiReWeighting(MCDist, DataDistABC);
+    LumiWeightsABC735_ = edm::LumiReWeighting(MCDist, DataDistABC735);
+    LumiWeightsABCD_ = edm::LumiReWeighting(MCDist, DataDistABCD);
+    LumiWeightsABCD735_ = edm::LumiReWeighting(MCDist, DataDistABCD735);
 
 
     return 0;
@@ -450,8 +444,6 @@ private:
     edm::LumiReWeighting LumiWeightsABC735_;
     edm::LumiReWeighting LumiWeightsABCD_;
     edm::LumiReWeighting LumiWeightsABCD735_;
-
-    int mVerbosity;
 
 };
 

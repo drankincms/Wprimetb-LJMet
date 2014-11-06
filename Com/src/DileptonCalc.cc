@@ -11,10 +11,10 @@
 #include "LJMet/Com/interface/LjmetFactory.h"
 #include "LJMet/Com/interface/LjmetEventContent.h"
 
-#include "EGamma/EGammaAnalysisTools/interface/ElectronEffectiveArea.h"
+#include "EgammaAnalysis/ElectronTools/interface/ElectronEffectiveArea.h"
 #include "LJMet/Com/interface/TopElectronSelector.h"
 
-#include "AnalysisDataFormats/TopObjects/interface/CATopJetTagInfo.h"
+#include "DataFormats/JetReco/interface/CATopJetTagInfo.h"
 
 using std::cout;
 using std::endl;
@@ -65,7 +65,7 @@ int DileptonCalc::BeginJob(){
   else                              dataType = "None";
   
   if (mPset.exists("rhoSrc"))       rhoSrc_it = mPset.getParameter<edm::InputTag>("rhoSrc");
-  else                              rhoSrc_it = edm::InputTag("kt6PFJetsForIsolation", "rho", "PAT");
+  else                              rhoSrc_it = edm::InputTag("fixedGridRhoAll", "", "RECO");
   
   if (mPset.exists("pvCollection")) pvCollection_it = mPset.getParameter<edm::InputTag>("pvCollection");
   else                              pvCollection_it = edm::InputTag("goodOfflinePrimaryVertices");
@@ -274,7 +274,7 @@ int DileptonCalc::AnalyzeEvent(edm::EventBase const & event,
       elRelIso . push_back(relIso);
 
       //Conversion rejection
-      int nLostHits = (*iel)->gsfTrack()->trackerExpectedHitsInner().numberOfLostHits();
+      int nLostHits = (*iel)->gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
       double dist   = (*iel)->convDist();
       double dcot   = (*iel)->convDcot();
       int notConv   = nLostHits == 0 and (fabs(dist) > 0.02 or fabs(dcot) > 0.02);
@@ -303,7 +303,7 @@ int DileptonCalc::AnalyzeEvent(edm::EventBase const & event,
       elHoE.push_back((*iel)->hadronicOverEm());
       elD0.push_back((*iel)->dB());
       elOoemoop.push_back(1.0/(*iel)->ecalEnergy() + (*iel)->eSuperClusterOverP()/(*iel)->ecalEnergy()); 
-      elMHits.push_back((*iel)->gsfTrack()->trackerExpectedHitsInner().numberOfHits());
+      elMHits.push_back((*iel)->gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS));
       elVtxFitConv.push_back((*iel)->passConversionVeto());
       if(isMc && keepFullMChistory){
       cout << "start\n";

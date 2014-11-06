@@ -64,8 +64,8 @@ int main (int argc, char* argv[])
   std::cout << legend << "the following parameter sets found:" << std::endl;
   // Get the python configuration
   PythonProcessDesc builder(argv[1]);
-  boost::shared_ptr<edm::ProcessDesc> b = builder.processDesc();
-  boost::shared_ptr<edm::ParameterSet> parameters = b->getProcessPSet();
+  std::shared_ptr<edm::ProcessDesc> b = builder.processDesc();
+  std::shared_ptr<edm::ParameterSet> parameters = b->getProcessPSet();
   parameters->registerIt();
 
 

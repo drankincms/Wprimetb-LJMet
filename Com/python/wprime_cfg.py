@@ -86,7 +86,7 @@ process.event_selector = cms.PSet(
     min_met                  = cms.double(20.0),
     
     btag_cuts                = cms.bool(True),
-    btagger                  = cms.string('combinedSecondaryVertexBJetTags'),
+    btagger                  = cms.string('slimmedSecondaryVertices'),
     btag_min_discr           = cms.double(0.679),
     btag_1                   = cms.bool(True),
     btag_2                   = cms.bool(False),
@@ -100,11 +100,11 @@ process.event_selector = cms.PSet(
     JERdown                  = cms.bool(False),
     JEC_txtfile = cms.string('../cond/Summer12_V2_DATA_AK5PF_UncertaintySources.txt'),
     trigger_collection       = cms.InputTag('TriggerResults::HLT'),
-    pv_collection            = cms.InputTag('goodOfflinePrimaryVertices'),
-    jet_collection           = cms.InputTag('goodPatJetsPFlow'),
-    muon_collection          = cms.InputTag('selectedPatMuonsPFlow'),
-    electron_collection      = cms.InputTag('selectedPatElectronsPFlow'),
-    met_collection           = cms.InputTag('patMETsPFlow'),
+    pv_collection            = cms.InputTag('offlineSlimmedPrimaryVertices'),
+    jet_collection           = cms.InputTag('slimmedJets'),
+    muon_collection          = cms.InputTag('slimmedMuons'),
+    electron_collection      = cms.InputTag('slimmedElectrons'),
+    met_collection           = cms.InputTag('slimmedMETs'),
     type1corrmet_collection  = cms.InputTag('pfType1CorrectedMet'),
 
     )
@@ -114,8 +114,8 @@ process.event_selector = cms.PSet(
 #
 # Input files
 #
-input_module = 'LJMet.Com.Wprime1900Right_cff'
 #input_module = 'LJMet.Com.TT_CT10_TuneZ2star_8TeV_powheg_tauola_Summer12_DR53X_PU_S10_START53_V7A_v2_TLBSM_53x_v2_sample_cff'
+input_module - 'root://cmsxrootd.fnal.gov/'
 process.load(input_module)
 #process.inputs.nEvents    = cms.int32(1000000)
 process.inputs.nEvents    = cms.int32(10000)
@@ -146,7 +146,7 @@ process.outputs = cms.PSet (
 
 # Primary vertex
 process.load('PhysicsTools.SelectorUtils.pvSelector_cfi')
-process.pvSelector.pvSrc   = cms.InputTag('goodOfflinePrimaryVertices')
+process.pvSelector.pvSrc   = cms.InputTag('offlineSlimmedPrimaryVertices')
 process.pvSelector.minNdof = cms.double(4.0)
 process.pvSelector.maxZ    = cms.double(24.0)
 process.pvSelector.maxRho  = cms.double(2.0)

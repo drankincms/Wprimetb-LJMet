@@ -10,8 +10,7 @@
 #include "LJMet/Com/interface/LjmetFactory.h"
 #include "LJMet/Com/interface/LjmetEventContent.h"
 #include "TLorentzVector.h"
-#include "EGamma/EGammaAnalysisTools/interface/ElectronEffectiveArea.h"
-//#include "EgammaAnalysis/ElectronTools/interface/ElectronEffectiveArea.h"
+#include "EgammaAnalysis/ElectronTools/interface/ElectronEffectiveArea.h"
 #include "DataFormats/HLTReco/interface/TriggerEvent.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/PatCandidates/interface/TriggerObject.h"
@@ -41,7 +40,7 @@ public:
 
 
         if (mPset.exists("rhoSrc")) rhoSrc_ = mPset.getParameter<edm::InputTag>("rhoSrc");
-        else                        rhoSrc_ = edm::InputTag("kt6PFJets", "rho");
+        else                        rhoSrc_ = edm::InputTag("fixedGridRhoAll", "");
 
         if (mPset.exists("isTB"))    isTB_ = mPset.getParameter<bool>("isTB");
         else                         isTB_ = false;
@@ -212,7 +211,7 @@ int WprimeCalc::AnalyzeEvent(edm::EventBase const & event,
 
 	_electron_1_Ooemoop = (1.0/vSelElectrons[0]->ecalEnergy() - vSelElectrons[0]->eSuperClusterOverP()/vSelElectrons[0]->ecalEnergy());
 	_electron_1_RelIso  = ( chIso + max(0.0, nhIso + phIso - rhoIso*AEff) )/ vSelElectrons[0]->ecalDrivenMomentum().pt();
-	_electron_1_mHits   =  vSelElectrons[0]->gsfTrack()->trackerExpectedHitsInner().numberOfHits();
+	_electron_1_mHits   =  vSelElectrons[0]->gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
 	_electron_1_vtxFitConv = vSelElectrons[0]->passConversionVeto();
 
     }

@@ -659,8 +659,8 @@ bool WprimeEventSelector::operator()( edm::EventBase const & event, pat::strbits
         event.getByLabel( mtPar["met_collection"], mhMet );
         mpMet = edm::Ptr<pat::MET>( mhMet, 0);
 
-        event.getByLabel( mtPar["type1corrmet_collection"], mhType1CorrMet );
-        mpType1CorrMet = edm::Ptr<reco::PFMET>( mhType1CorrMet, 0);
+        //event.getByLabel( mtPar["type1corrmet_collection"], mhType1CorrMet );
+        //mpType1CorrMet = edm::Ptr<reco::PFMET>( mhType1CorrMet, 0);
         if ( mbPar["met_cuts"] ) {
 
             // pfMet
