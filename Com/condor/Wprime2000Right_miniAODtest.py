@@ -43,8 +43,8 @@ process.event_selector = cms.PSet(
     trigger_cut  = cms.bool(True),
     dump_trigger = cms.bool(False),
     
-    mctrigger_path_el = cms.string('HLT_Ele27_WP80_v10'), 
-    mctrigger_path_mu = cms.string('HLT_IsoMu24_eta2p1_v13'), 
+    mctrigger_path_el = cms.string('HLT_Ele30_CaloIdVT_TrkIdT_PFNoPUJet150_PFNoPUJet25_v9'), 
+    mctrigger_path_mu = cms.string('HLT_Mu40_eta2p1_v12'), 
     trigger_path_el = cms.vstring('HLT_Ele27_WP80_v8','HLT_Ele27_WP80_v9','HLT_Ele27_WP80_v10','HLT_Ele27_WP80_v11'), 
     trigger_path_mu = cms.vstring('HLT_IsoMu24_eta2p1_v11','HLT_IsoMu24_eta2p1_v12','HLT_IsoMu24_eta2p1_v13','HLT_IsoMu24_eta2p1_v14','HLT_IsoMu24_eta2p1_v15'),
  
@@ -112,7 +112,7 @@ process.event_selector = cms.PSet(
 # Input files
 #
 process.inputs = cms.PSet (
-   nEvents    = cms.int32(-1),
+   nEvents    = cms.int32(1000),
     skipEvents = cms.int32(0),
     lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange()),
     fileNames  = cms.vstring(
@@ -150,12 +150,31 @@ process.pvSelector.maxZ    = cms.double(24.0)
 process.pvSelector.maxRho  = cms.double(2.0)
 
 # Tight muon
-process.load('PhysicsTools.SelectorUtils.pfMuonSelector_cfi')
-process.pfMuonSelector.version = cms.string('TOPPAG12_LJETS')
+process.load('LJMet.Com.pfMuonSelector_cfi') 
+process.pfMuonSelector.version          = cms.string('TOPPAG12_LJETS')
+process.pfMuonSelector.Chi2             = cms.double(10.0)
+process.pfMuonSelector.NHits            = cms.int32(0)
+process.pfMuonSelector.minValidMuHits       = cms.int32(1)
+process.pfMuonSelector.maxIp               = cms.double(0.2)
+process.pfMuonSelector.maxPfRelIso            = cms.double(0.12) # 0.12
+process.pfMuonSelector.minPixelHits       = cms.int32(1)
+process.pfMuonSelector.minMatchedStations = cms.int32(2)
+process.pfMuonSelector.minTrackerLayers = cms.int32(6)
+process.pfMuonSelector.cutsToIgnore     = cms.vstring('TrackerMuon')
 
-# Loose muon                                                       
+# Loose muon
 process.looseMuonSelector = process.pfMuonSelector.clone()
-process.looseMuonSelector.version = cms.string('TOPPAG12_LJETS_VETO')
+process.looseMuonSelector.PFIso        = cms.double(0.2)
+process.looseMuonSelector.nLayersWithMeasurement = cms.int32(0) # not sure why it has to be like this
+process.looseMuonSelector.cutsToIgnore = cms.vstring('TrackerMuon',
+                                                     'Chi2',
+                                                     'NHits',
+                                                     'NValMuHits',
+                                                     'D0',
+                                                     'nPixelHits',
+                                                     'nMatchedStations',
+                                                     #'nLayersWithMeasurement'
+                                                     )
 
 # electron
 process.load('LJMet.Com.cutbasedIDSelector_cfi')
