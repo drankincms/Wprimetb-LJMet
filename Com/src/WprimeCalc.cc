@@ -258,13 +258,13 @@ int WprimeCalc::AnalyzeEvent(edm::EventBase const & event,
     SetValue("elec_2_RelIso", _electron_2_RelIso);
 
     // Trigger Matching
-    edm::Handle<trigger::TriggerEvent> mhEdmTriggerEvent;  
-    event.getByLabel(triggerSummary_,mhEdmTriggerEvent);
-    trigger::TriggerObjectCollection allObjects = mhEdmTriggerEvent->getObjects();
+//    edm::Handle<trigger::TriggerEvent> mhEdmTriggerEvent;  
+//    event.getByLabel(triggerSummary_,mhEdmTriggerEvent);
+//    trigger::TriggerObjectCollection allObjects = mhEdmTriggerEvent->getObjects();
  
     int _electron_1_hltmatched =0;
     int _electron_2_hltmatched =0;
-
+/*
     if (_nSelElectrons>0) {
       for(int i=0; i<mhEdmTriggerEvent->sizeFilters(); i++){       
         if( mhEdmTriggerEvent->filterTag(i).label()!="hltEle27WP80TrackIsoFilter") continue;
@@ -283,7 +283,7 @@ int WprimeCalc::AnalyzeEvent(edm::EventBase const & event,
         }
       }
     }
-
+*/
     SetValue("electron_1_hltmatched",_electron_1_hltmatched);
     SetValue("electron_2_hltmatched",_electron_2_hltmatched);
 

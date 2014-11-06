@@ -4,11 +4,20 @@ import FWCore.ParameterSet.Types as CfgTypes
 
 process = cms.Process("LJMetCom")
 
+relBase    = str('/data1/speer/tblsm/cmssw/git-transition/new-git_5_3_6/')
 ############################################################
 #
 # FWLite application options
 process.load('LJMet.Com.ljmet_cfi')
 process.ljmet.isMc = cms.bool(True)
+process.ljmet.excluded_calculators = cms.vstring(
+    #'WprimeCalc',
+    'DileptonCalc',
+    'StopCalc',
+    'PdfCalc',
+    'ChargedHiggsCalc',
+    'TprimeCalc'
+    ) 
 
 # common calculator options
 process.load('LJMet.Com.commonCalc_cfi')
@@ -38,12 +47,13 @@ process.event_selector = cms.PSet(
     debug  = cms.bool(False),
 
     isMc  = cms.bool(True),
+    doLaserCalFilt  = cms.bool(False),
     
     trigger_cut  = cms.bool(True),
     dump_trigger = cms.bool(False),
     
-    mctrigger_path_el = cms.string('HLT_Ele27_WP80_v10'), 
-    mctrigger_path_mu = cms.string('HLT_IsoMu24_eta2p1_v13'), 
+    mctrigger_path_el = cms.string('HLT_Ele30_CaloIdVT_TrkIdT_PFNoPUJet150_PFNoPUJet25_v9'), 
+    mctrigger_path_mu = cms.string('HLT_Mu40_eta2p1_v12'), 
     trigger_path_el = cms.vstring('HLT_Ele27_WP80_v8','HLT_Ele27_WP80_v9','HLT_Ele27_WP80_v10','HLT_Ele27_WP80_v11'), 
     trigger_path_mu = cms.vstring('HLT_IsoMu24_eta2p1_v11','HLT_IsoMu24_eta2p1_v12','HLT_IsoMu24_eta2p1_v13','HLT_IsoMu24_eta2p1_v14','HLT_IsoMu24_eta2p1_v15'),
 
@@ -101,12 +111,23 @@ process.event_selector = cms.PSet(
     JEC_txtfile = cms.string('../cond/Summer12_V2_DATA_AK5PF_UncertaintySources.txt'),
     trigger_collection       = cms.InputTag('TriggerResults::HLT'),
     pv_collection            = cms.InputTag('offlineSlimmedPrimaryVertices'),
+    removeJetLepOverlap      = cms.bool(True),
     jet_collection           = cms.InputTag('slimmedJets'),
     muon_collection          = cms.InputTag('slimmedMuons'),
     electron_collection      = cms.InputTag('slimmedElectrons'),
     met_collection           = cms.InputTag('slimmedMETs'),
-    type1corrmet_collection  = cms.InputTag('pfType1CorrectedMet'),
+    type1corrmet_collection  = cms.InputTag(''),
 
+    do53xJEC                 = cms.bool(False),
+
+    MCL1JetPar               = cms.string(relBase+'/src/LJMet/Com/data/START53_V7G_L1FastJet_AK5PFchs.txt'),
+    MCL2JetPar               = cms.string(relBase+'/src/LJMet/Com/data/START53_V7G_L2Relative_AK5PFchs.txt'),
+    MCL3JetPar               = cms.string(relBase+'/src/LJMet/Com/data/START53_V7G_L3Absolute_AK5PFchs.txt'),
+
+    DataL1JetPar             = cms.string(relBase+'/src/LJMet/Com/data/FT_53_V10_AN3_L1FastJet_AK5PFchs.txt'),
+    DataL2JetPar             = cms.string(relBase+'/src/LJMet/Com/data/FT_53_V10_AN3_L2Relative_AK5PFchs.txt'),
+    DataL3JetPar             = cms.string(relBase+'/src/LJMet/Com/data/FT_53_V10_AN3_L3Absolute_AK5PFchs.txt'),
+    DataResJetPar            = cms.string(relBase+'/src/LJMet/Com/data/FT_53_V10_AN3_L2L3Residual_AK5PFchs.txt')
     )
 
 
@@ -114,6 +135,7 @@ process.event_selector = cms.PSet(
 #
 # Input files
 #
+
 process.inputs = cms.PSet (
        nEvents    = cms.int32(100),
            skipEvents = cms.int32(0),
@@ -122,14 +144,16 @@ process.inputs = cms.PSet (
 		[
 			       'root://cmsxrootd.fnal.gov//store/mc/Spring14miniaod/SingletopWprime_M2000GeV_right_Tune4C_13TeV-comphep/MINIAODSIM/PU20bx25_POSTLS170_V5-v1/00000/2C794437-DF1E-E411-9467-0025901ACB64.root',
 		]
-           )
-)
+                   )
+       )
+
+#process.load(input_module)
 
 
 # JSON
-JsonFile = 'data/json/Cert_190456-202016_8TeV_PromptReco_Collisions12_JSON_MuonPhys.txt'
-myList   = LumiList.LumiList(filename=JsonFile).getCMSSWString().split(',')
 if (not process.ljmet.isMc==cms.bool(True)):
+    JsonFile = 'data/json/Cert_190456-202016_8TeV_PromptReco_Collisions12_JSON_MuonPhys.txt'
+    myList   = LumiList.LumiList(filename=JsonFile).getCMSSWString().split(',')
     process.inputs.lumisToProcess.extend(myList)
         
                 
@@ -157,15 +181,15 @@ process.pvSelector.maxRho  = cms.double(2.0)
 
 # Tight muon
 process.load('LJMet.Com.pfMuonSelector_cfi') 
-process.pfMuonSelector.version          = cms.string('SPRING11')
+process.pfMuonSelector.version          = cms.string('TOPPAG12_LJETS')
 process.pfMuonSelector.Chi2             = cms.double(10.0)
 process.pfMuonSelector.NHits            = cms.int32(0)
-process.pfMuonSelector.NValMuHits       = cms.int32(1)
-process.pfMuonSelector.D0               = cms.double(0.2)
-process.pfMuonSelector.PFIso            = cms.double(0.12) # 0.12
-process.pfMuonSelector.nPixelHits       = cms.int32(1)
-process.pfMuonSelector.nMatchedStations = cms.int32(2)
-process.pfMuonSelector.nLayersWithMeasurement = cms.int32(6)
+process.pfMuonSelector.minValidMuHits       = cms.int32(1)
+process.pfMuonSelector.maxIp               = cms.double(0.2)
+process.pfMuonSelector.maxPfRelIso            = cms.double(0.12) # 0.12
+process.pfMuonSelector.minPixelHits       = cms.int32(1)
+process.pfMuonSelector.minMatchedStations = cms.int32(2)
+process.pfMuonSelector.minTrackerLayers = cms.int32(6)
 process.pfMuonSelector.cutsToIgnore     = cms.vstring('TrackerMuon')
 
 # Loose muon
