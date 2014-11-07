@@ -32,8 +32,8 @@
 //#include "PhysicsTools/SelectorUtils/interface/PFElectronSelector.h"
 #include "LJMet/Com/interface/TopElectronSelector.h"
 #include "PhysicsTools/SelectorUtils/interface/PFJetIDSelectionFunctor.h"
-//#include "LJMet/Com/interface/PFMuonSelector.h"
-#include "PhysicsTools/SelectorUtils/interface/PFMuonSelector.h"
+#include "LJMet/Com/interface/PFMuonSelector.h"
+//#include "PhysicsTools/SelectorUtils/interface/PFMuonSelector.h"
 
 #include "PhysicsTools/SelectorUtils/interface/PVSelector.h"
 #include "PhysicsTools/SelectorUtils/interface/PVObjectSelector.h"
