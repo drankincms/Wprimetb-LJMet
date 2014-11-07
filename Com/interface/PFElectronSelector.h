@@ -126,7 +126,7 @@ class PFElectronSelector : public Selector<pat::Electron> {
     double missingHits = electron.gsfTrack()->hitPattern().numberOfLostHits(reco::HitPattern::MISSING_INNER_HITS);
     double sceta = fabs(electron.superCluster()->eta());
     bool passconversion = electron.passConversionVeto();
-    double mvatrig = electron.electronID("mvaTrigV0");
+    double mva = electron.mva_e_pi();
 
 
     if ( missingHits   <= cut(indexMaxMissingHits_,  double()) || ignoreCut(indexMaxMissingHits_)   ) passCut(ret, indexMaxMissingHits_  );
@@ -138,8 +138,8 @@ class PFElectronSelector : public Selector<pat::Electron> {
     //else std::cout<<"fail SCEta "<<sceta<<std::endl;
     if ( passconversion                                        || ignoreCut(indexConvRej_)          ) passCut(ret, indexConvRej_     );
     //else std::cout<<"fail passconversion "<<passconversion<<std::endl;
-    if ( mvatrig       >  cut(indexMVA_,             double()) || ignoreCut(indexMVA_)              ) passCut(ret, indexMVA_ );
-    //else std::cout<<"fail mvatrig "<<mvatrig<<std::endl;    
+    if ( mva           >  cut(indexMVA_,             double()) || ignoreCut(indexMVA_)              ) passCut(ret, indexMVA_ );
+    //else std::cout<<"fail mva "<<mva<<std::endl;    
     passCut(ret, indexD0_);
     passCut(ret, indexDZ_);
     passCut(ret, indexElectronId_);
@@ -154,7 +154,7 @@ class PFElectronSelector : public Selector<pat::Electron> {
 
     ret.set(false);
 
-    double mva = electron.mva_Isolated();
+    double mva = electron.mva_e_pi();
     double missingHits = electron.gsfTrack()->hitPattern().numberOfHits(reco::HitPattern::MISSING_INNER_HITS);
     double corr_d0 = electron.dB();
 
