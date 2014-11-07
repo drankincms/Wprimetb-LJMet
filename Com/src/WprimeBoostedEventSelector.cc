@@ -171,7 +171,7 @@ void WprimeBoostedEventSelector::BeginJob( std::map<std::string, edm::ParameterS
         std::exit(-1);
     }  
 
-    _key = "cutbasedIDSelector";
+    _key = "pfElectronSelector";
     if ( par.find(_key)!=par.end() ){
         electronSel_ = boost::shared_ptr<PFElectronSelector>( new PFElectronSelector(par[_key]) );
         std::cout << mLegend << "electron selector configured!"
@@ -183,7 +183,7 @@ void WprimeBoostedEventSelector::BeginJob( std::map<std::string, edm::ParameterS
         std::exit(-1);
     }
   
-    _key = "looseElectronSelector";
+    _key = "loosePFElectronSelector";
     if ( par.find(_key)!=par.end() ){
         looseElectronSel_ = boost::shared_ptr<PFElectronSelector>( new PFElectronSelector(par[_key]) );
         std::cout << mLegend << "loose electron selector configured!"
