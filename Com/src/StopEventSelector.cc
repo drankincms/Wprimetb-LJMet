@@ -32,9 +32,11 @@
 #include "FWCore/Common/interface/TriggerNames.h"
 #include "LJMet/Com/interface/BaseEventSelector.h"
 #include "LJMet/Com/interface/LjmetFactory.h"
-#include "PhysicsTools/SelectorUtils/interface/PFElectronSelector.h"
+//#include "PhysicsTools/SelectorUtils/interface/PFElectronSelector.h"
+#include "LJMet/Com/interface/PFElectronSelector.h"
 #include "PhysicsTools/SelectorUtils/interface/PFJetIDSelectionFunctor.h"
-#include "PhysicsTools/SelectorUtils/interface/PFMuonSelector.h"
+//#include "PhysicsTools/SelectorUtils/interface/PFMuonSelector.h"
+#include "LJMet/Com/interface/PFMuonSelector.h"
 #include "PhysicsTools/SelectorUtils/interface/PVSelector.h"
 //#include "CondFormats/PhysicsToolsObjects/interface/BinningPointByMap.h"
 //#include "DataFormats/FWLite/interface/ESHandle.h"
@@ -124,8 +126,7 @@ private:
 
 
 
-//static int reg = LjmetFactory::GetInstance()->Register(new StopEventSelector(),
-//						       "StopSelector");
+static int reg = LjmetFactory::GetInstance()->Register(new StopEventSelector(),"StopSelector");
 
 
 
