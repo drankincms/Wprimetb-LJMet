@@ -73,7 +73,7 @@ private:
 
 
 
-static int reg = LjmetFactory::GetInstance()->Register(new WprimeCalc(), "WprimeCalc");
+//static int reg = LjmetFactory::GetInstance()->Register(new WprimeCalc(), "WprimeCalc");
 
 
 
@@ -622,6 +622,9 @@ int WprimeCalc::AnalyzeEvent(edm::EventBase const & event,
       edm::Handle<reco::GenParticleCollection> genParticles;
       edm::InputTag genParticles_it = edm::InputTag("prunedGenParticles");
       event.getByLabel(genParticles_it, genParticles);
+      edm::Handle<reco::GenParticleCollection> genParticlesPack;
+      edm::InputTag genParticlesPack_it = edm::InputTag("packedGenParticles");
+      event.getByLabel(genParticlesPack_it, genParticlesPack);
     
       int qLep = 0;
       math::XYZTLorentzVector lv_genLep;
@@ -631,10 +634,11 @@ int WprimeCalc::AnalyzeEvent(edm::EventBase const & event,
 
       for (size_t i = 0; i < genParticles->size(); i++) {
        	const reco::GenParticle & p = (*genParticles).at(i);
-	if (p.status() == 3) {
+	//std::cout << "PDG ID=" << p.pdgId() << ", Status=" << p.status() << ", pT=" << p.pt() << std::endl;
+	if (p.status() != 1) {
 	  if (fabs(p.pdgId())==11 or fabs(p.pdgId())==13) {
-          if (fabs(p.pdgId())==11) _hasGenEl = 1;
-          if (fabs(p.pdgId())==13) _hasGenMu = 1;
+            if (fabs(p.pdgId())==11) _hasGenEl = 1;
+            if (fabs(p.pdgId())==13) _hasGenMu = 1;
 
 	    lv_genLep = p.p4();
             if (p.pdgId()<0) qLep = 1;

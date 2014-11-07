@@ -81,6 +81,9 @@ public:
   double Et3() const;
   double minDijetDeltaR() const;
   double LeptonJet_DeltaR();           //btw lepton and leading 2 jet, minimum
+  double LepTopBJet_DeltaR();
+  double LepTopBJet_Dphi();
+  double LepTopBJet_Deta();
   double Jet1Jet2_DeltaR();     
   double Jet1Jet2_DeltaPhi();   
   double Jet1Jet2_M();     
@@ -174,6 +177,9 @@ public:
   double SecBestBTagTop();//new
   double BestTop();
   double BestTop_Pt();
+  double BestTopBJet_Eta();
+  double BestTopBJet_Phi();
+  double BestTopBJet_Pt();
   double BestJet_Pt();
   double BestJet_Eta();
   double BestJet_Phi();

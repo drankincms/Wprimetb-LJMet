@@ -163,8 +163,8 @@ int LJetsTopoVarsNew::setEvent(const vector<std::pair<TLorentzVector,bool> > jet
             TLorentzVector Top2;
             double TopMass1=0.0;
             double TopMass2=0.0;
-            double BestTopMass1 = -9999.0;
-            double BestTopMass2 = -9999.0;
+            double BestTopMass1 = -99999.0;
+            double BestTopMass2 = -99999.0;
             for (unsigned int i=0; i< m_jets.size(); i++ ) {
                 Top1 = p4LepW + m_jets[i];
                 Top2 = p4OtherLepW + m_jets[i];
@@ -273,11 +273,7 @@ int LJetsTopoVarsNew::setEventMetFixed(TLorentzVector& Jet1, TLorentzVector& Jet
         }
     }
   
-    //cout<<"mjets1_pt"<<m_jets[0].Pt()<<endl;
-    //cout<<"mjets3_energy"<<m_jets[2].E()<<endl;
-    //cout <<"mjet1_px = "<<m_jets[0].Px()<<endl;
-
-
+    //cout<< "----------------"<<endl;
     //cout<< "m_lepton.px, py, pz, energy = "<<m_lepton[0]<<", "<<m_lepton[1]<<", "<<m_lepton[2]<<", "<<m_lepton[3]<<endl;
     //cout<< "m_met.px, py, pz, energy = "<<m_met[0]<<", "<<m_met[1]<<", "<<m_met[2]<<", "<<m_met[3]<<endl;
     //cout<< "m_jet1.px, py, pz, energy = "<<m_jets[0][0]<<", "<<m_jets[0][1]<<", "<<m_jets[0][2]<<", "<<m_jets[0][3]<<endl; 
@@ -287,7 +283,7 @@ int LJetsTopoVarsNew::setEventMetFixed(TLorentzVector& Jet1, TLorentzVector& Jet
 
     //cout<<"IM stick inside jets"<<endl;
 
-    //cout<<"m_jets size = "<<m_jets.size()<<endl;
+    cout<<"m_jets size = "<<m_jets.size()<<endl;
     double nu_px = m_met.Px();
     double nu_py = m_met.Py();
 
@@ -769,13 +765,13 @@ double LJetsTopoVarsNew::LightJet_DiscVal(){
 double LJetsTopoVarsNew::BestTop() {
 
   TMBLorentzVector Top;
-  //std::cout<<"lepton pt "<<m_lepton.Pt()<<" neutrino pt "<<_neutrino.Pt()<<std::endl;
+  //std::cout<<" Topovar calc lepton pt "<<m_lepton.Pt()<<" neutrino pt "<<_neutrino.Pt()<<std::endl;
   TMBLorentzVector W = m_lepton + _neutrino;
   TMBLorentzVector BestTop;
   bool foundindex=false;
   
   double TopMass=0.0;
-  double BestTopMass = -9999.0;
+  double BestTopMass = -99999.0;
   //std::cout<< " Topovar calc TestBestTop njets = " <<m_jets.size() << std::endl;
   vector<TMBLorentzVector> objects;
   SetBestTop_JetIndex(-1);
@@ -789,6 +785,7 @@ double LJetsTopoVarsNew::BestTop() {
         BestTopMass = TopMass;
         BestTop = Top;
       
+	//std::cout << "New Best Top Mass is " << TopMass << endl;
         TMBLorentzVector TestBestTop = GetBestTop();
         //std::cout << " Topovar == TestBestTop" << TestBestTop.M() << std::endl;
       
@@ -851,6 +848,92 @@ double  LJetsTopoVarsNew::SecBestBTagTop(){
    
     } return TopMass;
 } 
+
+double LJetsTopoVarsNew::BestTopBJet_Phi() {
+  
+    TMBLorentzVector Top;
+    TMBLorentzVector W = m_lepton + _neutrino;
+    TMBLorentzVector BestTop;
+    bool foundindex=false;
+  
+    double TopMass=0.0;
+    double BestTopMass = 5000.0;
+    double BestTopBJetPhi = -100.;
+    vector<TMBLorentzVector> objects;
+    for (unsigned int i=0; i< m_jets.size(); i++ ) {
+        Top = W + m_jets[i];
+        TopMass = Top.M();
+        if ( fabs(172.5-TopMass) <  fabs(172.5-BestTopMass) ) {
+            BestTopMass = TopMass;
+            BestTop = Top;
+            BestTopBJetPhi = m_jets[i].Phi();
+            foundindex = true;
+        }
+    } // loop over jets
+  
+    if ( !foundindex){
+        cout << "In LjetsTopVars \n  Error: No Best Top created!\n" << endl;
+        return -1;
+    }
+    return BestTopBJetPhi;
+}
+double LJetsTopoVarsNew::BestTopBJet_Pt() {
+  
+    TMBLorentzVector Top;
+    TMBLorentzVector W = m_lepton + _neutrino;
+    TMBLorentzVector BestTop;
+    bool foundindex=false;
+  
+    double TopMass=0.0;
+    double BestTopMass = 5000.0;
+    double BestTopBJetPt = -100.;
+    vector<TMBLorentzVector> objects;
+    for (unsigned int i=0; i< m_jets.size(); i++ ) {
+        Top = W + m_jets[i];
+        TopMass = Top.M();
+        if ( fabs(172.5-TopMass) <  fabs(172.5-BestTopMass) ) {
+            BestTopMass = TopMass;
+            BestTop = Top;
+            BestTopBJetPt = m_jets[i].Pt();
+            foundindex = true;
+        }
+    } // loop over jets
+  
+    if ( !foundindex){
+        cout << "In LjetsTopVars \n  Error: No Best Top created!\n" << endl;
+        return -1;
+    }
+    return BestTopBJetPt;
+}
+
+double LJetsTopoVarsNew::BestTopBJet_Eta() {
+  
+    TMBLorentzVector Top;
+    TMBLorentzVector W = m_lepton + _neutrino;
+    TMBLorentzVector BestTop;
+    bool foundindex=false;
+  
+    double TopMass=0.0;
+    double BestTopMass = 5000.0;
+    double BestTopBJetEta = -100.;
+    vector<TMBLorentzVector> objects;
+    for (unsigned int i=0; i< m_jets.size(); i++ ) {
+        Top = W + m_jets[i];
+        TopMass = Top.M();
+        if ( fabs(172.5-TopMass) <  fabs(172.5-BestTopMass) ) {
+            BestTopMass = TopMass;
+            BestTop = Top;
+            BestTopBJetEta = m_jets[i].Eta();
+            foundindex = true;
+        }
+    } // loop over jets
+  
+    if ( !foundindex){
+        cout << "In LjetsTopVars \n  Error: No Best Top created!\n" << endl;
+        return -1;
+    }
+    return BestTopBJetEta;
+}
 
 double LJetsTopoVarsNew::BestTop_Pt() {
   
@@ -978,8 +1061,51 @@ double LJetsTopoVarsNew::BestJetJet2W_M() {
 double LJetsTopoVarsNew::BestJet_Pt() {
     if(m_jets.size()>0) {
         unsigned int index = GetBestTop_JetIndex();
+	//std::cout << "BestJet_Pt = " << m_jets.at(index).Pt() << std::endl;
         return m_jets.at(index).Pt();
     } else return -10;
+}
+
+double LJetsTopoVarsNew::LepTopBJet_DeltaR() {
+    if(m_jets.size()>0) {
+        unsigned int index = GetBestTop_JetIndex();
+        //cout<< "----------------"<<endl;
+        //std::cout << "best top bjet is jet" << index+1 << std::endl;
+	//std::cout << "LepTopBJet_DeltaR = " << m_lepton.DeltaR(m_jets.at(index)) << std::endl;
+	double deta = m_lepton.Eta()-m_jets[index].Eta();
+	double dphi = m_lepton.Phi()-m_jets[index].Phi();
+	if (dphi > TMath::Pi()) dphi -= 2*TMath::Pi();
+	if (dphi <= -TMath::Pi()) dphi += 2*TMath::Pi();
+	//std::cout << "LepTopBJet_DeltaR(manual calc) = " << TMath::Sqrt((deta*deta)+(dphi*dphi)) << std::endl;
+        //cout<< "m_lepton.pt, eta, phi, energy = "<<m_lepton.Pt()<<", "<<m_lepton.Eta()<<", "<<m_lepton.Phi()<<", "<<m_lepton[3]<<endl;
+        //cout<< "m_met.pt, eta, phi, energy = "<<m_met.Pt()<<", "<<m_met.Eta()<<", "<<m_met.Phi()<<", "<<m_met[3]<<endl;
+        //cout<< "m_jet1.pt, eta, phi, energy = "<<m_jets[0].Pt()<<", "<<m_jets[0].Eta()<<", "<<m_jets[0].Phi()<<", "<<m_jets[0][3]<<endl; 
+        //if (m_jets.size()>1) cout<< "m_jet2.pt, eta, phi, energy = "<<m_jets[1].Pt()<<", "<<m_jets[1].Eta()<<", "<<m_jets[1].Phi()<<", "<<m_jets[1][3]<<endl;
+        //if (m_jets.size()>2) cout<< "m_jet3.pt, eta, phi, energy = "<<m_jets[2].Pt()<<", "<<m_jets[2].Eta()<<", "<<m_jets[2].Phi()<<", "<<m_jets[2][3]<<endl;
+        //if (m_jets.size()>3) cout<< "m_jet4.pt, eta, phi, energy = "<<m_jets[3].Pt()<<", "<<m_jets[3].Eta()<<", "<<m_jets[3].Phi()<<", "<<m_jets[3][3]<<endl;
+        //if (m_jets.size()>4) cout<< "m_jet5.pt, eta, phi, energy = "<<m_jets[4].Pt()<<", "<<m_jets[4].Eta()<<", "<<m_jets[4].Phi()<<", "<<m_jets[4][3]<<endl;
+        //if (m_jets.size()>5) cout<< "m_jet6.pt, eta, phi, energy = "<<m_jets[5].Pt()<<", "<<m_jets[5].Eta()<<", "<<m_jets[5].Phi()<<", "<<m_jets[5][3]<<endl;
+        //if (m_jets.size()>6) cout<< "m_jet7.pt, eta, phi, energy = "<<m_jets[6].Pt()<<", "<<m_jets[6].Eta()<<", "<<m_jets[6].Phi()<<", "<<m_jets[6][3]<<endl;
+        //if (m_jets.size()>7) cout<< "m_jet8.pt, eta, phi, energy = "<<m_jets[7].Pt()<<", "<<m_jets[7].Eta()<<", "<<m_jets[7].Phi()<<", "<<m_jets[7][3]<<endl;
+        //if (m_jets.size()>8) cout<< "m_jet9.pt, eta, phi, energy = "<<m_jets[8].Pt()<<", "<<m_jets[8].Eta()<<", "<<m_jets[8].Phi()<<", "<<m_jets[8][3]<<endl;
+        return m_lepton.DeltaR(m_jets.at(index));
+    } else return 1e99;	
+}
+
+double LJetsTopoVarsNew::LepTopBJet_Dphi() {
+    if(m_jets.size()>0) {
+        unsigned int index = GetBestTop_JetIndex();
+        //std::cout << "index is " << index << std::endl;
+        return fabs(m_jets.at(index).Phi()-m_lepton.Phi());
+    } else return 1e99;	
+}
+
+double LJetsTopoVarsNew::LepTopBJet_Deta() {
+    if(m_jets.size()>0) {
+        unsigned int index = GetBestTop_JetIndex();
+        //std::cout << "index is " << index << std::endl;
+        return fabs(m_jets.at(index).Eta()-m_lepton.Eta());
+    } else return 1e99;	
 }
 
 double LJetsTopoVarsNew::BestJet_Eta() {

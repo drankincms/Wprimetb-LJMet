@@ -18,10 +18,10 @@ process.CommonCalc.dummy_parameter = cms.string('Dummy parameter value')
 process.load('LJMet.Com.stopCalc_cfi')
 
 # Wprime calculator options
-process.load('LJMet.Com.wprimeCalc_cfi')
-process.WprimeCalc.isWJets = cms.bool(False)
-process.WprimeCalc.isTB = cms.bool(True)
-process.WprimeCalc.isTT = cms.bool(False)
+process.load('LJMet.Com.wprimeBoostedCalc_cfi')
+process.WprimeBoostedCalc.isWJets = cms.bool(False)
+process.WprimeBoostedCalc.isTB = cms.bool(True)
+process.WprimeBoostedCalc.isTT = cms.bool(False)
 
 # LjetsTopoCalc options
 process.load('LJMet.Com.ljetsTopoCalcNew_cfi')
@@ -112,7 +112,7 @@ process.event_selector = cms.PSet(
 # Input files
 #
 process.inputs = cms.PSet (
-   nEvents    = cms.int32(1000),
+   nEvents    = cms.int32(20000),
     skipEvents = cms.int32(0),
     lumisToProcess = CfgTypes.untracked(CfgTypes.VLuminosityBlockRange()),
     fileNames  = cms.vstring(

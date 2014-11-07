@@ -273,6 +273,9 @@ int LjetsTopoCalcNew::FillLjetsBranches( std::vector<edm::Ptr<pat::Muon> > const
 	SetValue("BestJet_Eta", topovars.BestJet_Eta());
 	SetValue("BestJet_Phi", topovars.BestJet_Phi());
         SetValue("BestTop_Pt", topovars.BestTop_Pt());
+        SetValue("BestTopBJet_Eta", topovars.BestTopBJet_Eta());
+        SetValue("BestTopBJet_Phi", topovars.BestTopBJet_Phi());
+        SetValue("BestTopBJet_Pt", topovars.BestTopBJet_Pt());
         SetValue("SecBestTop", topovars.SecBestTop());
         SetValue("SecBestBTagTop", topovars.SecBestBTagTop());
         SetValue("BTagTopMass", topovars.BTagTopMass());
@@ -298,6 +301,9 @@ int LjetsTopoCalcNew::FillLjetsBranches( std::vector<edm::Ptr<pat::Muon> > const
         SetValue("Muon_DeltaR", topovars.Muon_DeltaR());
         SetValue("PzNu", topovars.pznu());
         SetValue("PzOtherNu", topovars.pzothernu());
+        SetValue("LepTopBJet_DeltaR", topovars.LepTopBJet_DeltaR());
+        SetValue("LepTopBJet_Dphi", topovars.LepTopBJet_Dphi());
+        SetValue("LepTopBJet_Deta", topovars.LepTopBJet_Deta());
 
         result = 0;
         break;
