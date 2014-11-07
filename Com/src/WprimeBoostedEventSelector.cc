@@ -30,7 +30,7 @@
 #include "DataFormats/PatCandidates/interface/TriggerObject.h"
 #include "FWCore/Common/interface/TriggerNames.h"
 //#include "PhysicsTools/SelectorUtils/interface/PFElectronSelector.h"
-#include "LJMet/Com/interface/TopElectronSelector.h"
+//#include "LJMet/Com/interface/TopElectronSelector.h"
 #include "PhysicsTools/SelectorUtils/interface/PFJetIDSelectionFunctor.h"
 #include "LJMet/Com/interface/PFMuonSelector.h"
 #include "LJMet/Com/interface/PFElectronSelector.h"
@@ -79,8 +79,8 @@ public:
     boost::shared_ptr<PFJetIDSelectionFunctor> const & jetSel()        const { return jetSel_;}
     boost::shared_ptr<PFMuonSelector>          const & muonSel()       const { return muonSel_;}
     boost::shared_ptr<PFMuonSelector>          const & looseMuonSel()  const { return looseMuonSel_;}
-    boost::shared_ptr<TopElectronSelector>     const & electronSel() const { return electronSel_;} 
-    boost::shared_ptr<TopElectronSelector>     const & looseElectronSel() const { return looseElectronSel_;}
+    boost::shared_ptr<PFElectronSelector>      const & electronSel() const { return electronSel_;} 
+    boost::shared_ptr<PFElectronSelector>      const & looseElectronSel() const { return looseElectronSel_;}
     boost::shared_ptr<PVSelector>              const & pvSel()         const { return pvSel_;}
 
 protected:
@@ -98,8 +98,8 @@ protected:
 
     boost::shared_ptr<PFMuonSelector>          muonSel_;
     boost::shared_ptr<PFMuonSelector>          looseMuonSel_;
-    boost::shared_ptr<TopElectronSelector>     electronSel_;
-    boost::shared_ptr<TopElectronSelector>     looseElectronSel_;
+    boost::shared_ptr<PFElectronSelector>      electronSel_;
+    boost::shared_ptr<PFElectronSelector>      looseElectronSel_;
 
     boost::shared_ptr<PFJetIDSelectionFunctor> jetSel_;
     boost::shared_ptr<PVSelector>              pvSel_;
@@ -173,8 +173,8 @@ void WprimeBoostedEventSelector::BeginJob( std::map<std::string, edm::ParameterS
 
     _key = "cutbasedIDSelector";
     if ( par.find(_key)!=par.end() ){
-        electronSel_ = boost::shared_ptr<TopElectronSelector>( new TopElectronSelector(par[_key]) );
-        std::cout << mLegend << "cut based electron selector configured!"
+        electronSel_ = boost::shared_ptr<PFElectronSelector>( new PFElectronSelector(par[_key]) );
+        std::cout << mLegend << "electron selector configured!"
                   << std::endl;
     }
     else {
@@ -185,8 +185,8 @@ void WprimeBoostedEventSelector::BeginJob( std::map<std::string, edm::ParameterS
   
     _key = "looseElectronSelector";
     if ( par.find(_key)!=par.end() ){
-        looseElectronSel_ = boost::shared_ptr<TopElectronSelector>( new TopElectronSelector(par[_key]) );
-        std::cout << mLegend << "cut based loose electron selector configured!"
+        looseElectronSel_ = boost::shared_ptr<PFElectronSelector>( new PFElectronSelector(par[_key]) );
+        std::cout << mLegend << "loose electron selector configured!"
                   << std::endl;
     }
     else {
