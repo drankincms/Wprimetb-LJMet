@@ -781,7 +781,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
 
     for (size_t i = 0; i < genParticles->size(); i++) {
       const reco::GenParticle & p = (*genParticles).at(i);
-      if (p.status() == 3) {
+      if (p.status() != 1 && p.status() != 2) {
 	if (fabs(p.pdgId())==11 or fabs(p.pdgId())==13) {
           if (fabs(p.pdgId())==11) _hasGenEl = 1;
           if (fabs(p.pdgId())==13) _hasGenMu = 1;
