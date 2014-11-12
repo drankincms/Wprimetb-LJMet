@@ -38,7 +38,7 @@ public:
   virtual int BeginJob(){
     
     if (mPset.exists("triggerSummary")) triggerSummary_ = mPset.getParameter<edm::InputTag>("triggerSummary");
-    else                                triggerSummary_ = edm::InputTag("hltTriggerSummaryAOD");
+    else                                triggerSummary_ = edm::InputTag("selectedPatTrigger");
     
     if (mPset.exists("triggerCollection")) triggerCollection_ = mPset.getParameter<edm::InputTag>("triggerCollection");
     else                                triggerCollection_ = edm::InputTag("TriggerResults::HLT");
@@ -324,23 +324,24 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   SetValue("elec_2_RelIso", _electron_2_RelIso);
 
   // Trigger Matching
-  //edm::Handle<trigger::TriggerEvent> mhEdmTriggerEvent;  
-  //event.getByLabel(triggerSummary_,mhEdmTriggerEvent);
-  //trigger::TriggerObjectCollection allObjects = mhEdmTriggerEvent->getObjects();
- 
+  edm::Handle<pat::TriggerObjectStandAloneCollection> mhEdmTriggerObjectColl;  
+  event.getByLabel(triggerSummary_,mhEdmTriggerObjectColl);
+
+  const edm::TriggerNames &names = event.triggerNames(*mhEdmTriggerResults);
+
   int _electron_1_hltmatched =0;
   int _electron_2_hltmatched =0;
-/*
+
   if (_nSelElectrons>0) {
-    for(int i=0; i<mhEdmTriggerEvent->sizeFilters(); i++){       
-      if( mhEdmTriggerEvent->filterTag(i).label()!="hltEle27WP80TrackIsoFilter") continue;
-      trigger::Keys keys = mhEdmTriggerEvent->filterKeys(i);
+    for(pat::TriggerObjectStandAlone obj : *mhEdmTriggerObjectColl){       
+      obj.unpackPathNames(names);
       double dR1 = 999.0;
       double dR2 = 999.0;
-      for(size_t j=0; j<keys.size(); j++){
-	dR1=deltaR(allObjects[keys[j]].eta(),allObjects[keys[j]].phi(),_electron_1_eta,_electron_1_phi);
-	if (_nSelElectrons>1) dR2=deltaR(allObjects[keys[j]].eta(),allObjects[keys[j]].phi(),_electron_2_eta,_electron_2_phi);
-	if ( (dR1 < 0.5) || (dR2 < 0.5) ) { 
+      for(unsigned h = 0; h < obj.filterLabels().size(); ++h){
+        if( obj.filterLabels()[h]!="hltEle27WP80TrackIsoFilter") continue;
+    	dR1=deltaR(obj.eta(),obj.phi(),_electron_1_eta,_electron_1_phi);
+  	if (_nSelElectrons>1) dR2=deltaR(obj.eta(),obj.phi(),_electron_2_eta,_electron_2_phi);
+  	if ( (dR1 < 0.5) || (dR2 < 0.5) ) { 
 	  if (dR1 < 0.5 && dR2 < 0.5 && dR1<dR2 ) _electron_1_hltmatched = 1;
 	  else if (dR1 < 0.5 && dR2 < 0.5 && dR2<dR1 ) _electron_2_hltmatched = 1;
 	  else if (dR1 < 0.5 && dR2 >= 0.5 ) _electron_1_hltmatched =1;
@@ -349,7 +350,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
       }
     }
   }
-*/
+
   SetValue("electron_1_hltmatched",_electron_1_hltmatched);
   SetValue("electron_2_hltmatched",_electron_2_hltmatched);
 
