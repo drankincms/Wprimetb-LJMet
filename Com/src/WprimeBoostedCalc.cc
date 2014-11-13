@@ -764,6 +764,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   double _genTopBjetPhi = -1.0;
   double _genLeptonEta = -1.0;
   double _genLeptonPhi = -1.0;
+  double _genLeptonPt = -1.0;
   double _genNuPz = -1.0;
 
   int _hasGenMu = -1;
@@ -826,6 +827,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
     _genTopBjetPhi = (qLep<0?lv_genBbar.Phi():lv_genB.Phi());
     _genLeptonEta = lv_genLep.Eta();
     _genLeptonPhi = lv_genLep.Phi();
+    _genLeptonPt = lv_genLep.Pt();
 
     double deta = -999.0;
     double dphi = -999.0;
@@ -871,6 +873,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   SetValue("genTopBjetEta", _genTopBjetEta);
   SetValue("genLeptonEta", _genLeptonEta);
   SetValue("genLeptonPhi", _genLeptonPhi);
+  SetValue("genLeptonPt", _genLeptonPt);
   SetValue("genTopBjetPhi", _genTopBjetPhi);
    
   double _genTTMass = -1.0;
