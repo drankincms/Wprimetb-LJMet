@@ -137,12 +137,12 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   int passTrigEle27v10 = -1;
   int passTrigIsoMu24v13 = -1;
   
-  unsigned int _tElMCIndex = trigNames.triggerIndex("HLT_Ele30_CaloIdVT_TrkIdT_PFJet100_PFJet25_v5");
+  unsigned int _tElMCIndex = trigNames.triggerIndex("HLT_Ele30_CaloIdVT_TrkIdT_PFJet150_PFJet25_v9");
   if ( _tElMCIndex<_tSize){
     passTrigEle27v10 = mhEdmTriggerResults->accept(_tElMCIndex);
   }
 
-  unsigned int _tMuMCIndex = trigNames.triggerIndex("HLT_Mu40_eta2p1_v9");
+  unsigned int _tMuMCIndex = trigNames.triggerIndex("HLT_Mu40_eta2p1_v12");
   if ( _tMuMCIndex<_tSize){
     passTrigIsoMu24v13 = mhEdmTriggerResults->accept(_tMuMCIndex);
   }
@@ -338,7 +338,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
       double dR1 = 999.0;
       double dR2 = 999.0;
       for(unsigned h = 0; h < obj.filterLabels().size(); ++h){
-        if( obj.filterLabels()[h]!="hltEle27WP80TrackIsoFilter") continue;
+        if( obj.filterLabels()[h]!="hltEle30CaloIdVTTrkIdTDphiFilter") continue;
     	dR1=deltaR(obj.eta(),obj.phi(),_electron_1_eta,_electron_1_phi);
   	if (_nSelElectrons>1) dR2=deltaR(obj.eta(),obj.phi(),_electron_2_eta,_electron_2_phi);
   	if ( (dR1 < 0.5) || (dR2 < 0.5) ) { 
