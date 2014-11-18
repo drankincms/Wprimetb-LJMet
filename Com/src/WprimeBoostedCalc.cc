@@ -810,6 +810,8 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
 	if (fabs(p.pdgId())==12 or fabs(p.pdgId())==14) lv_genNu = p.p4();
 	if (p.pdgId()==5) lv_genB = p.p4();
 	if (p.pdgId()==-5) lv_genBbar = p.p4();
+      }
+      if (p.status() == 23 || p.status() == 33 || p.status() == 14 || p.status() == 15 || p.status() == 24 || p.status() == 34 || p.status() == 43 || p.status() == 51) {
         if (fabs(p.pdgId())<=5 || p.pdgId()==9 || p.pdgId()==21) lv_genPartons.push_back(p.p4());
       }
     }
