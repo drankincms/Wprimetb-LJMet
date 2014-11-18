@@ -76,6 +76,7 @@ private:
   bool isTB_;
   bool isTT_;
   std::string btagger_;
+  static bool my_compare(math::XYZTLorentzVector i, math::XYZTLorentzVector j){return i.Pt() < j.Pt();}
 };
 
 
@@ -770,6 +771,14 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   double _genLeptonPhi = -1.0;
   double _genLeptonPt = -1.0;
   double _genNuPz = -1.0;
+  double _genJet0Pt = -1.0;
+  double _genJet1Pt = -1.0;
+  double _genJet2Pt = -1.0;
+  double _genJet3Pt = -1.0;
+  double _genrecoDRJet0 = 9999.0;
+  double _genrecoDRJet1 = 9999.0;
+  double _genrecoDRJet2 = 9999.0;
+  double _genrecoDRJet3 = 9999.0;
 
   int _hasGenMu = -1;
   int _hasGenEl = -1;
@@ -784,6 +793,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
     math::XYZTLorentzVector lv_genNu;
     math::XYZTLorentzVector lv_genB;
     math::XYZTLorentzVector lv_genBbar;
+    std::vector<math::XYZTLorentzVector> lv_genPartons;
 
     for (size_t i = 0; i < genParticles->size(); i++) {
       const reco::GenParticle & p = (*genParticles).at(i);
@@ -800,9 +810,47 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
 	if (fabs(p.pdgId())==12 or fabs(p.pdgId())==14) lv_genNu = p.p4();
 	if (p.pdgId()==5) lv_genB = p.p4();
 	if (p.pdgId()==-5) lv_genBbar = p.p4();
+        if (fabs(p.pdgId())<=5 || p.pdgId()==9 || p.pdgId()==21) lv_genPartons.push_back(p.p4());
       }
     }
-       
+    
+    double deta = -999.0;
+    double dphi = -999.0;
+      
+    std::sort(lv_genPartons.begin(), lv_genPartons.end(), my_compare);
+    if (_nSelJets>0 && lv_genPartons.size()>0 ) {
+      _genJet0Pt=lv_genPartons[0].Pt();
+      deta = lv_genPartons[0].Eta()-_jet_0_eta;
+      dphi = lv_genPartons[0].Phi()-_jet_0_phi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genrecoDRJet0 = TMath::Sqrt(deta*deta + dphi*dphi);    
+    }
+    if (_nSelJets>1 && lv_genPartons.size()>1 ) {
+      _genJet1Pt=lv_genPartons[1].Pt();
+      deta = lv_genPartons[1].Eta()-_jet_1_eta;
+      dphi = lv_genPartons[1].Phi()-_jet_1_phi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genrecoDRJet1 = TMath::Sqrt(deta*deta + dphi*dphi);    
+    }
+    if (_nSelJets>2 && lv_genPartons.size()>2 ) {
+      _genJet2Pt=lv_genPartons[2].Pt();
+      deta = lv_genPartons[2].Eta()-_jet_0_eta;
+      dphi = lv_genPartons[2].Phi()-_jet_0_phi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genrecoDRJet2 = TMath::Sqrt(deta*deta + dphi*dphi);    
+    }
+    if (_nSelJets>3 && lv_genPartons.size()>3 ) {
+      _genJet3Pt=lv_genPartons[3].Pt();
+      deta = lv_genPartons[3].Eta()-_jet_0_eta;
+      dphi = lv_genPartons[3].Phi()-_jet_0_phi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genrecoDRJet3 = TMath::Sqrt(deta*deta + dphi*dphi);    
+    }
+
     _genNuPz = lv_genNu.Pz();
 
     math::XYZTLorentzVector lv_genTop;
@@ -833,9 +881,6 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
     _genLeptonPhi = lv_genLep.Phi();
     _genLeptonPt = lv_genLep.Pt();
 
-    double deta = -999.0;
-    double dphi = -999.0;
-      
     if (qLep<0) {
       deta = lv_genLep.Eta()-lv_genBbar.Eta();
       dphi = lv_genLep.Phi()-lv_genBbar.Phi();
@@ -907,6 +952,14 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   SetValue("genDrWprimeBjetJet1", _genDrWprimeBjetJet1);
   SetValue("genDrTopBjetJet0", _genDrTopBjetJet0);
   SetValue("genDrTopBjetJet1", _genDrTopBjetJet1);
+  SetValue("genJet0Pt", _genJet0Pt);
+  SetValue("genJet1Pt", _genJet1Pt);
+  SetValue("genJet2Pt", _genJet2Pt);
+  SetValue("genJet3Pt", _genJet3Pt);
+  SetValue("genrecoDRJet0", _genrecoDRJet0);
+  SetValue("genrecoDRJet1", _genrecoDRJet1);
+  SetValue("genrecoDRJet2", _genrecoDRJet2);
+  SetValue("genrecoDRJet3", _genrecoDRJet3);
    
   double _genTTMass = -1.0;
   double _genTPt = -1.0;
