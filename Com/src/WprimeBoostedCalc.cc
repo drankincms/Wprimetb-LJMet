@@ -755,6 +755,10 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   double _genTopMass = -1.0;
   double _genTopPt = -1.0;
   double _genDrLeptonTopBjet = -9999.0;
+  double _genDrWprimeBjetJet0 = -9999.0;
+  double _genDrWprimeBjetJet1 = -9999.0;
+  double _genDrTopBjetJet0 = -9999.0;
+  double _genDrTopBjetJet1 = -9999.0;
   double _genWprimeMass = -1.0;
   double _genWprimeBjetPt = -1.0;
   double _genWprimeBjetEta = -1.0;
@@ -855,6 +859,30 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
       _genDrLeptonTopBjet = TMath::Sqrt(deta*deta + dphi*dphi);    
       //std::cout<<"gen dR = "<<_genDrLeptonTopBjet<<std::endl;
     }
+    if (_nCorrBtagJets>0) {
+      deta = _jet_0_eta-_genTopBjetEta;
+      dphi = _jet_0_phi-_genTopBjetPhi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genDrTopBjetJet0 = TMath::Sqrt(deta*deta + dphi*dphi);
+      deta = _jet_0_eta-_genWprimeBjetEta;
+      dphi = _jet_0_phi-_genWprimeBjetPhi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genDrWprimeBjetJet0 = TMath::Sqrt(deta*deta + dphi*dphi);
+    }
+    if (_nCorrBtagJets>1) {
+      deta = _jet_1_eta-_genTopBjetEta;
+      dphi = _jet_1_phi-_genTopBjetPhi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genDrTopBjetJet1 = TMath::Sqrt(deta*deta + dphi*dphi);    
+      deta = _jet_1_eta-_genWprimeBjetEta;
+      dphi = _jet_1_phi-_genWprimeBjetPhi;
+      if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
+      if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
+      _genDrWprimeBjetJet1 = TMath::Sqrt(deta*deta + dphi*dphi);    
+    }
        
   }
   
@@ -871,10 +899,14 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   SetValue("genWprimeBjetPhi", _genWprimeBjetPhi);
   SetValue("genTopBjetPt", _genTopBjetPt);
   SetValue("genTopBjetEta", _genTopBjetEta);
+  SetValue("genTopBjetPhi", _genTopBjetPhi);
+  SetValue("genLeptonPt", _genLeptonPt);
   SetValue("genLeptonEta", _genLeptonEta);
   SetValue("genLeptonPhi", _genLeptonPhi);
-  SetValue("genLeptonPt", _genLeptonPt);
-  SetValue("genTopBjetPhi", _genTopBjetPhi);
+  SetValue("genDrWprimeBjetJet0", _genDrWprimeBjetJet0);
+  SetValue("genDrWprimeBjetJet1", _genDrWprimeBjetJet1);
+  SetValue("genDrTopBjetJet0", _genDrTopBjetJet0);
+  SetValue("genDrTopBjetJet1", _genDrTopBjetJet1);
    
   double _genTTMass = -1.0;
   double _genTPt = -1.0;
