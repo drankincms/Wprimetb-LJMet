@@ -779,6 +779,10 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   double _genrecoDRJet1 = 9999.0;
   double _genrecoDRJet2 = 9999.0;
   double _genrecoDRJet3 = 9999.0;
+  double _genrecoPTJet0 = 9999.0;
+  double _genrecoPTJet1 = 9999.0;
+  double _genrecoPTJet2 = 9999.0;
+  double _genrecoPTJet3 = 9999.0;
 
   int _hasGenMu = -1;
   int _hasGenEl = -1;
@@ -788,12 +792,16 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
     edm::InputTag genParticles_it = edm::InputTag("prunedGenParticles");
     event.getByLabel(genParticles_it, genParticles);
     
+    edm::Handle<reco::GenJetCollection> genJets;
+    edm::InputTag genJets_it = edm::InputTag("slimmedGenJets");
+    event.getByLabel(genJets_it, genJets);
+    
     int qLep = 0;
     math::XYZTLorentzVector lv_genLep;
     math::XYZTLorentzVector lv_genNu;
     math::XYZTLorentzVector lv_genB;
     math::XYZTLorentzVector lv_genBbar;
-    std::vector<math::XYZTLorentzVector> lv_genPartons;
+    std::vector<math::XYZTLorentzVector> lv_genJets;
 
     for (size_t i = 0; i < genParticles->size(); i++) {
       const reco::GenParticle & p = (*genParticles).at(i);
@@ -811,46 +819,55 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
 	if (p.pdgId()==5) lv_genB = p.p4();
 	if (p.pdgId()==-5) lv_genBbar = p.p4();
       }
-      if (p.status() == 23 || p.status() == 33 || p.status() == 14 || p.status() == 15 || p.status() == 24 || p.status() == 34 || p.status() == 43 || p.status() == 51 || p.status() == 62 || p.status() == 63 || p.status() == 91) {
-        if (fabs(p.pdgId())<=5 || p.pdgId()==9 || p.pdgId()==21) lv_genPartons.push_back(p.p4());
-      }
+//      if (p.status() == 23 || p.status() == 33 || p.status() == 14 || p.status() == 15 || p.status() == 24 || p.status() == 34 || p.status() == 43 || p.status() == 51 || p.status() == 62 || p.status() == 63 || p.status() == 91) {
+//        if (fabs(p.pdgId())<=5 || p.pdgId()==9 || p.pdgId()==21) lv_genPartons.push_back(p.p4());
+//      }
+    }
+    for (size_t j = 0; j < genJets->size(); j++) {
+      const reco::GenJet & je = (*genJets).at(j);
+      lv_genJets.push_back(je.p4());
     }
     
     double deta = -999.0;
     double dphi = -999.0;
       
-    std::sort(lv_genPartons.begin(), lv_genPartons.end(), my_compare);
-    if (_nSelJets>0 && lv_genPartons.size()>0 ) {
-      _genJet0Pt=lv_genPartons[0].Pt();
-      deta = lv_genPartons[0].Eta()-_jet_0_eta;
-      dphi = lv_genPartons[0].Phi()-_jet_0_phi;
+    std::sort(lv_genJets.begin(), lv_genJets.end(), my_compare);
+
+    if (_nSelJets>0 && lv_genJets.size()>0 ) {
+      _genJet0Pt=lv_genJets[0].Pt();
+      deta = lv_genJets[0].Eta()-_jet_0_eta;
+      dphi = lv_genJets[0].Phi()-_jet_0_phi;
       if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
       if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
       _genrecoDRJet0 = TMath::Sqrt(deta*deta + dphi*dphi);    
+      _genrecoPTJet0 = _genJet0Pt-_jet_0_pt;
     }
-    if (_nSelJets>1 && lv_genPartons.size()>1 ) {
-      _genJet1Pt=lv_genPartons[1].Pt();
-      deta = lv_genPartons[1].Eta()-_jet_1_eta;
-      dphi = lv_genPartons[1].Phi()-_jet_1_phi;
+    if (_nSelJets>1 && lv_genJets.size()>1 ) {
+      _genJet1Pt=lv_genJets[1].Pt();
+      deta = lv_genJets[1].Eta()-_jet_1_eta;
+      dphi = lv_genJets[1].Phi()-_jet_1_phi;
       if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
       if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
       _genrecoDRJet1 = TMath::Sqrt(deta*deta + dphi*dphi);    
+      _genrecoPTJet1 = _genJet1Pt-_jet_1_pt;
     }
-    if (_nSelJets>2 && lv_genPartons.size()>2 ) {
-      _genJet2Pt=lv_genPartons[2].Pt();
-      deta = lv_genPartons[2].Eta()-_jet_0_eta;
-      dphi = lv_genPartons[2].Phi()-_jet_0_phi;
+    if (_nSelJets>2 && lv_genJets.size()>2 ) {
+      _genJet2Pt=lv_genJets[2].Pt();
+      deta = lv_genJets[2].Eta()-_jet_0_eta;
+      dphi = lv_genJets[2].Phi()-_jet_0_phi;
       if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
       if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
       _genrecoDRJet2 = TMath::Sqrt(deta*deta + dphi*dphi);    
+      _genrecoPTJet2 = _genJet2Pt-_jet_2_pt;
     }
-    if (_nSelJets>3 && lv_genPartons.size()>3 ) {
-      _genJet3Pt=lv_genPartons[3].Pt();
-      deta = lv_genPartons[3].Eta()-_jet_0_eta;
-      dphi = lv_genPartons[3].Phi()-_jet_0_phi;
+    if (_nSelJets>3 && lv_genJets.size()>3 ) {
+      _genJet3Pt=lv_genJets[3].Pt();
+      deta = lv_genJets[3].Eta()-_jet_0_eta;
+      dphi = lv_genJets[3].Phi()-_jet_0_phi;
       if ( dphi > TMath::Pi() ) dphi -= 2.*TMath::Pi();
       if ( dphi <= -TMath::Pi() ) dphi += 2.*TMath::Pi();
       _genrecoDRJet3 = TMath::Sqrt(deta*deta + dphi*dphi);    
+      _genrecoPTJet3 = _genJet3Pt-_jet_3_pt;
     }
 
     _genNuPz = lv_genNu.Pz();
@@ -962,6 +979,10 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
   SetValue("genrecoDRJet1", _genrecoDRJet1);
   SetValue("genrecoDRJet2", _genrecoDRJet2);
   SetValue("genrecoDRJet3", _genrecoDRJet3);
+  SetValue("genrecoPTJet0", _genrecoPTJet0);
+  SetValue("genrecoPTJet1", _genrecoPTJet1);
+  SetValue("genrecoPTJet2", _genrecoPTJet2);
+  SetValue("genrecoPTJet3", _genrecoPTJet3);
    
   double _genTTMass = -1.0;
   double _genTPt = -1.0;
