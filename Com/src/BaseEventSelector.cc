@@ -59,17 +59,17 @@ void BaseEventSelector::BeginJob(std::map<std::string, edm::ParameterSet const >
 
     if (par[_key].exists("MCL1JetPar")) msPar["MCL1JetPar"] = par[_key].getParameter<std::string> ("MCL1JetPar");
     else{
-      msPar["MCL1JetPar"] = "../data/START53_V7G_L1FastJet_AK5PFchs.txt";
+      msPar["MCL1JetPar"] = "../data/MCRUN2_72_V3A_L1FastJet_AK4PFchs.txt";
       _missing_config = true;
     }
     if (par[_key].exists("MCL2JetPar")) msPar["MCL2JetPar"] = par[_key].getParameter<std::string> ("MCL2JetPar");
     else{
-      msPar["MCL2JetPar"] = "../data/START53_V7G_L2Relative_AK5PFchs.txt";
+      msPar["MCL2JetPar"] = "../data/MCRUN2_72_V3A_L2Relative_AK4PFchs.txt";
       _missing_config = true;
     }
     if (par[_key].exists("MCL3JetPar")) msPar["MCL3JetPar"] = par[_key].getParameter<std::string> ("MCL3JetPar");
     else{
-      msPar["MCL3JetPar"] = "../data/START53_V7G_L3Absolute_AK5PFchs.txt";
+      msPar["MCL3JetPar"] = "../data/MCRUN2_72_V3A_L3Absolute_AK4PFchs.txt";
       _missing_config = true;
     }
 
