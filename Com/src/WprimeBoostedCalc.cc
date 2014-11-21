@@ -803,6 +803,8 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
     math::XYZTLorentzVector lv_genBbar;
     std::vector<math::XYZTLorentzVector> lv_genJets;
 
+    //std::cout << "-----------------Event start-------------------" << std::endl;
+
     for (size_t i = 0; i < genParticles->size(); i++) {
       const reco::GenParticle & p = (*genParticles).at(i);
       //std::cout << "Status = " << p.status() << "\tId = " << p.pdgId() << std::endl;
@@ -818,6 +820,7 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
 	if (fabs(p.pdgId())==12 or fabs(p.pdgId())==14) lv_genNu = p.p4();
 	if (p.pdgId()==5) lv_genB = p.p4();
 	if (p.pdgId()==-5) lv_genBbar = p.p4();
+        //std::cout << "genParticle Id=" << p.pdgId() << " , pT=" << p.pt() << " , eta=" << p.eta() << " , phi=" << p.phi() << std::endl;
       }
 //      if (p.status() == 23 || p.status() == 33 || p.status() == 14 || p.status() == 15 || p.status() == 24 || p.status() == 34 || p.status() == 43 || p.status() == 51 || p.status() == 62 || p.status() == 63 || p.status() == 91) {
 //        if (fabs(p.pdgId())<=5 || p.pdgId()==9 || p.pdgId()==21) lv_genPartons.push_back(p.p4());
@@ -825,8 +828,20 @@ int WprimeBoostedCalc::AnalyzeEvent(edm::EventBase const & event,
     }
     for (size_t j = 0; j < genJets->size(); j++) {
       const reco::GenJet & je = (*genJets).at(j);
+      //std::cout << "genJet Id=" << je.pdgId() << " , pT=" << je.pt() << " , eta=" << je.eta() << " , phi=" << je.phi() << std::endl;
       lv_genJets.push_back(je.p4());
     }
+    /*if (_nSelJets>0) std::cout << "recoJet partonFlavour=" << _jet_0_flavor << " , pT=" << _jet_0_pt << " , eta=" << _jet_0_eta << " , phi=" << _jet_0_phi << std::endl;
+    if (_nSelJets>1) std::cout << "recoJet partonFlavour=" << _jet_1_flavor << " , pT=" << _jet_1_pt << " , eta=" << _jet_1_eta << " , phi=" << _jet_1_phi << std::endl;
+    if (_nSelJets>2) std::cout << "recoJet partonFlavour=" << _jet_2_flavor << " , pT=" << _jet_2_pt << " , eta=" << _jet_2_eta << " , phi=" << _jet_2_phi << std::endl;
+    if (_nSelJets>3) std::cout << "recoJet partonFlavour=" << _jet_3_flavor << " , pT=" << _jet_3_pt << " , eta=" << _jet_3_eta << " , phi=" << _jet_3_phi << std::endl;
+    if (_nSelJets>4) std::cout << "recoJet partonFlavour=" << _jet_4_flavor << " , pT=" << _jet_4_pt << " , eta=" << _jet_4_eta << " , phi=" << _jet_4_phi << std::endl;
+    if (_nSelJets>5) std::cout << "recoJet partonFlavour=" << _jet_5_flavor << " , pT=" << _jet_5_pt << " , eta=" << _jet_5_eta << " , phi=" << _jet_5_phi << std::endl;
+    if (_nSelJets>6) std::cout << "recoJet partonFlavour=" << _jet_6_flavor << " , pT=" << _jet_6_pt << " , eta=" << _jet_6_eta << " , phi=" << _jet_6_phi << std::endl;
+    if (_nSelJets>7) std::cout << "recoJet partonFlavour=" << _jet_7_flavor << " , pT=" << _jet_7_pt << " , eta=" << _jet_7_eta << " , phi=" << _jet_7_phi << std::endl;
+    if (_nSelJets>8) std::cout << "recoJet partonFlavour=" << _jet_8_flavor << " , pT=" << _jet_8_pt << " , eta=" << _jet_8_eta << " , phi=" << _jet_8_phi << std::endl;
+    if (_nSelJets>9) std::cout << "recoJet partonFlavour=" << _jet_9_flavor << " , pT=" << _jet_9_pt << " , eta=" << _jet_9_eta << " , phi=" << _jet_9_phi << std::endl;*/
+
     
     double deta = -999.0;
     double dphi = -999.0;
